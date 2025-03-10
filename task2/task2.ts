@@ -67,32 +67,101 @@
 
 
 //Task 4 : Create a form inside the HTML page that contains inputs for ( name , description, price and quantity) for product and when you submit the form it will save the product inside array in the local storage and then display all the products as a cards under the form.*use interface to create a structure for this product 
- 
+// interface Product {
+//     name: string;
+//     description: string;
+//     price: number;
+//     quantity: number;
+// }
+
+// function displayProducts() {
+//     const productContainer = document.getElementById("product-card");
+//     if (!productContainer) return;
+
+//     const products: Product[] = JSON.parse(localStorage.getItem("products") || "[]");
+
+//     productContainer.innerHTML = "";
+//     for (const product of products) {
+//         productContainer.innerHTML += `
+//             <div class="card">
+//                 <h3>${product.name}</h3>
+//                 <p>${product.description}</p>
+//                 <p><strong>$${product.price}</strong></p>
+//                 <p>Quantity: ${product.quantity}</p>
+//             </div>
+//         `;
+//     }
+// }
+
+// document.getElementById("product-form")?.addEventListener("submit", function (event) {
+//     event.preventDefault();
+
+//     const products: Product[] = JSON.parse(localStorage.getItem("products") || "[]");
+
+//     const product: Product = {
+//         name: (document.getElementById("name") as any).value,
+//         description: (document.getElementById("description") as any).value,
+//         price: parseFloat((document.getElementById("price") as any).value),
+//         quantity: parseInt((document.getElementById("quantity") as any).value),
+//     };
+
+//     products.push(product);
+//     localStorage.setItem("products", JSON.stringify(products));
+
+//     displayProducts();
+// });
+
+// document.addEventListener("DOMContentLoaded", displayProducts);
+
+
+
+
+///
+
 interface Product {
+    id: number;
     name: string;
     description: string;
     price: number;
     quantity: number;
 }
 
+function displayProducts() {
+    const productContainer = document.getElementById("product-card");
+    if (!productContainer) return;
+
+    const products: Product[] = JSON.parse(localStorage.getItem("products") || "[]");
+
+    productContainer.innerHTML = "";
+    for (const product of products) {
+        productContainer.innerHTML += `
+            <div class="card" id="product-${product.id}">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p><strong>$${product.price}</strong></p>
+                <p>Quantity: ${product.quantity}</p>
+            </div>
+        `;
+    }
+}
+
 document.getElementById("product-form")?.addEventListener("submit", function (event) {
     event.preventDefault();
 
+    const products: Product[] = JSON.parse(localStorage.getItem("products") || "[]");
+
     const product: Product = {
+        id: Date.now(), 
         name: (document.getElementById("name") as any).value,
         description: (document.getElementById("description") as any).value,
         price: parseFloat((document.getElementById("price") as any).value),
         quantity: parseInt((document.getElementById("quantity") as any).value),
     };
 
-    localStorage.setItem("product", JSON.stringify(product));
+    products.push(product);
+    localStorage.setItem("products", JSON.stringify(products));
 
-    document.getElementById("product-card")!.innerHTML = `
-        <div class="card">
-            <h3>${product.name}</h3>
-            <p>${product.description}</p>
-            <p><strong>$${product.price}</strong></p>
-            <p>Quantity: ${product.quantity}</p>
-        </div>
-    `;
+    displayProducts();
 });
+
+document.addEventListener("DOMContentLoaded", displayProducts);
